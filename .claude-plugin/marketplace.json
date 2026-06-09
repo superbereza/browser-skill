@@ -1,14 +1,14 @@
 {
   "name": "browser-skill",
-  "description": "Self-marketplace for the browser plugin (browse the web as the user)",
+  "description": "Self-marketplace for the browser plugin",
   "owner": {
     "name": "superbereza"
   },
   "plugins": [
     {
       "name": "browser",
-      "description": "Browse the web as the user — drive their own logged-in browser via Patchright + a daemon; CLI + skill",
-      "version": "0.1.0",
+      "description": "Drive a real browser from a coding agent — a CLI over a persistent Playwright daemon; CLI + skill",
+      "version": "0.2.0",
       "source": "./"
     }
   ]

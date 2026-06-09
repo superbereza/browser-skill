@@ -106,9 +106,16 @@ browser snapshot                     # find the input + button refs
 browser type e8 "query" && browser press Enter
 ```
 
-**Skip an interactive flow with a URL formula** (see per-site guides, if present):
-many sites encode the whole search in the URL — `goto` straight to results instead of
-clicking through; fewer steps, more robust.
+**Skip an interactive flow with a URL formula:** many sites encode the whole search in
+the URL — `goto` straight to results instead of clicking through; fewer steps, more
+robust.
+
+## Site guides
+
+Before working with a known site, check [`site-guides/`](site-guides/) — short notes
+on the non-obvious bits (URL formulas, async timing, where a `ref` won't click, popups
+to dismiss). Currently: `airbnb`, `aviasales`, `chatgpt`. Add one when you learn
+something about a site that the snapshot can't tell you.
 
 ## Notes
 

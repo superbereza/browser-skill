@@ -1,8 +1,8 @@
 {
   "name": "browser",
-  "displayName": "Browser (as the user)",
-  "description": "Browse the web as the user — drive their own logged-in browser (real profile) via Patchright + an auto-managed daemon.",
-  "version": "0.1.0",
+  "displayName": "Browser",
+  "description": "Drive a real browser from a coding agent: a CLI over a persistent Playwright daemon, with compact clickable page snapshots.",
+  "version": "0.2.0",
   "author": {
     "name": "superbereza"
   },

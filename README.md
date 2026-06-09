@@ -57,10 +57,10 @@ Rationale for the non-obvious calls lives in [`docs/decisions/`](docs/decisions/
 
 ## Status
 
-v0.1.0. Smoke-tested on macOS: launch/attach, snapshot + refs, navigation,
+v0.2.0. Smoke-tested on macOS: launch/attach, snapshot + refs, navigation,
 click/type/press/scroll/hover/select, tabs, upload/download, dialog, eval, wait. The
-optional `playwright-captcha` solver path is scaffolded, not yet wired. Per-site
-navigation guides are planned next.
+optional `playwright-captcha` solver path is scaffolded, not yet wired. Per-site guides
+for `airbnb` / `aviasales` / `chatgpt` ship under `skills/browser/site-guides/`.
 
 ## License
 
