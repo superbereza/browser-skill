@@ -1,0 +1,18 @@
+{
+  "name": "browser",
+  "description": "Browse the web as the user — drive their own logged-in browser (real profile) to read pages and act on sites that need to recognise them. Patchright + auto-managed daemon; pages as clickable snapshots.",
+  "version": "0.1.0",
+  "author": {
+    "name": "superbereza"
+  },
+  "homepage": "https://github.com/superbereza/browser-skill",
+  "repository": "https://github.com/superbereza/browser-skill",
+  "keywords": [
+    "browser",
+    "automation",
+    "patchright",
+    "playwright",
+    "cli",
+    "skills"
+  ]
+}

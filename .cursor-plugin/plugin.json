@@ -1,0 +1,20 @@
+{
+  "name": "browser",
+  "displayName": "Browser (as the user)",
+  "description": "Browse the web as the user — drive their own logged-in browser (real profile) via Patchright + an auto-managed daemon.",
+  "version": "0.1.0",
+  "author": {
+    "name": "superbereza"
+  },
+  "homepage": "https://github.com/superbereza/browser-skill",
+  "repository": "https://github.com/superbereza/browser-skill",
+  "keywords": [
+    "browser",
+    "automation",
+    "patchright",
+    "playwright",
+    "cli",
+    "skills"
+  ],
+  "skills": "./skills/"
+}

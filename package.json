@@ -1,0 +1,10 @@
+{
+  "name": "browser-skill",
+  "version": "0.1.0",
+  "description": "Drive a real browser from a coding agent via a CLI over a persistent Playwright daemon.",
+  "type": "module",
+  "main": ".opencode/plugins/browser.js",
+  "bin": {
+    "browser": "./bin/browser"
+  }
+}

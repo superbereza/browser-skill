@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+# Self-bootstrapping launcher for browser-skill.
+# Creates a local venv on first run, installs deps, then runs the CLI client.
+# (The CLI auto-spawns the daemon; the daemon attaches to your real browser.)
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+VENV="$ROOT/.venv"
+REQ="$ROOT/requirements.txt"
+STAMP="$VENV/.req-stamp"
+
+# Pick the newest Python >= 3.10 (macOS' default python3 may be 3.9).
+pick_python() {
+  for c in python3.14 python3.13 python3.12 python3.11 python3.10 python3; do
+    command -v "$c" >/dev/null 2>&1 || continue
+    if "$c" -c 'import sys; sys.exit(0 if sys.version_info >= (3,10) else 1)' 2>/dev/null; then
+      echo "$c"; return 0
+    fi
+  done
+  return 1
+}
+
+if [ ! -x "$VENV/bin/python" ]; then
+  PY="$(pick_python)" || { echo "browser-skill needs Python >= 3.10 (found none)" >&2; exit 1; }
+  "$PY" -m venv "$VENV"
+fi
+
+# (Re)install deps when requirements change.
+if [ ! -f "$STAMP" ] || [ "$REQ" -nt "$STAMP" ]; then
+  "$VENV/bin/pip" install -q --upgrade pip >/dev/null 2>&1 || true
+  "$VENV/bin/pip" install -q -r "$REQ"
+  touch "$STAMP"
+fi
+
+exec env PYTHONPATH="$ROOT/src" "$VENV/bin/python" -m browser_skill.cli "$@"

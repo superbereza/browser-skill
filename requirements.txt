@@ -1,0 +1,7 @@
+# Core: the stealth Playwright fork. We attach to the user's already-running
+# browser via connect_over_cdp, so no bundled-browser download is needed.
+patchright>=1.40
+
+# Optional — captcha tiers 1.5 (Cloudflare click) and 3 (2captcha API).
+# Uncomment to enable `browser captcha solve`:
+# playwright-captcha>=0.1.5

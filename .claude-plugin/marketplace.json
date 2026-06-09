@@ -1,0 +1,15 @@
+{
+  "name": "browser-skill",
+  "description": "Self-marketplace for the browser plugin (browse the web as the user)",
+  "owner": {
+    "name": "superbereza"
+  },
+  "plugins": [
+    {
+      "name": "browser",
+      "description": "Browse the web as the user — drive their own logged-in browser via Patchright + a daemon; CLI + skill",
+      "version": "0.1.0",
+      "source": "./"
+    }
+  ]
+}

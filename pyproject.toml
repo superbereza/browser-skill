@@ -1,0 +1,20 @@
+[project]
+name = "browser-skill"
+version = "0.1.0"
+description = "Browse the web as the user — drive their own browser via Patchright + an auto-managed daemon."
+requires-python = ">=3.10"
+dependencies = ["patchright>=1.40"]
+
+[project.optional-dependencies]
+captcha = ["playwright-captcha>=0.1.5"]
+
+[project.scripts]
+browser = "browser_skill.cli:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+packages = ["browser_skill"]
