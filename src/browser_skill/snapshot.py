@@ -1,55 +1,33 @@
 """Compact, clickable page snapshot.
 
-Base is Playwright's built-in ``aria_snapshot`` (see ADR
-2026-06-09-builtin-aria-snapshot — we do NOT hand-roll an AX filter). We attach a
-``[ref=eN]`` to each interactive line and return a ref-map so ``click e7`` resolves
-back to a live locator via ``get_by_role``.
+Uses Playwright's built-in **AI snapshot** — ``aria_snapshot(mode="ai")`` — which tags
+every addressable element with a stable ``[ref=eN]``, *including icon-only / nameless*
+buttons (a ``⋮`` kebab, a bare ``✕``) that a plain ``aria_snapshot`` can't name. Each ref
+resolves back to the **exact** element by identity via the built-in ``aria-ref=`` selector
+engine — no ``get_by_role`` name-guessing, no ``nth`` drift.
+
+Supersedes the hand-rolled ref map (which only named interactive roles, so nameless
+elements never got a ref). See ADR 2026-06-12-ai-ref-snapshot.
 """
 from __future__ import annotations
 
 import re
 
-# Roles we expose as clickable refs.
-INTERACTIVE = {
-    "button", "link", "textbox", "searchbox", "checkbox", "radio", "combobox",
-    "menuitem", "menuitemcheckbox", "menuitemradio", "tab", "option", "switch",
-    "slider", "spinbutton",
-}
-
-# Matches an aria_snapshot YAML line:  `  - button "Найти билеты"` (name optional).
-_LINE = re.compile(r'^(\s*)- ([a-z][a-z0-9-]*)(?:\s+"((?:[^"\\]|\\.)*)")?')
+_REF = re.compile(r"\[ref=([^\]\s]+)\]")
 
 
-def _unescape(s: str) -> str:
-    return s.replace('\\"', '"').replace("\\\\", "\\")
+def snapshot(page) -> tuple[str, set]:
+    """Return ``(text, refs)``. ``text`` already carries ``[ref=eN]`` markers (assigned by
+    Playwright's AI snapshot); ``refs`` is the set of valid ref ids for that snapshot."""
+    text = page.locator("html").aria_snapshot(mode="ai")
+    return text, set(_REF.findall(text))
 
 
-def snapshot(page) -> tuple[str, dict]:
-    """Return (text, refmap). refmap: ref -> {role, name, nth}."""
-    aria = page.locator("html").aria_snapshot()
-    lines, refs, counts, i = [], {}, {}, 0
-    for ln in aria.splitlines():
-        m = _LINE.match(ln)
-        if m and m.group(2) in INTERACTIVE and m.group(3) is not None:
-            role, name = m.group(2), _unescape(m.group(3))
-            n = counts.get((role, name), 0)
-            counts[(role, name)] = n + 1
-            i += 1
-            ref = f"e{i}"
-            refs[ref] = {"role": role, "name": name, "nth": n}
-            lines.append(f"{ln}  [ref={ref}]")
-        else:
-            lines.append(ln)
-    return "\n".join(lines), refs
+def locator_for(page, refs, ref: str):
+    """Resolve a ref to a live locator via the built-in ``aria-ref=`` engine.
 
-
-def locator_for(page, refs: dict, ref: str):
-    """Resolve a ref to a live locator. Raises if the ref is unknown."""
-    e = refs.get(ref)
-    if not e:
+    The ref must come from the most recent snapshot (Playwright ties ``aria-ref`` ids to it).
+    """
+    if not refs or ref not in refs:
         raise ValueError(f"unknown ref '{ref}' — run `snapshot` first")
-    loc = page.get_by_role(e["role"], name=e["name"], exact=True)
-    # disambiguate duplicates by the occurrence index recorded at snapshot time
-    if e.get("nth"):
-        loc = loc.nth(e["nth"])
-    return loc
+    return page.locator(f"aria-ref={ref}")

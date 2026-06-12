@@ -1,6 +1,6 @@
 [project]
 name = "browser-skill"
-version = "0.2.2"
+version = "0.3.0"
 description = "Drive a real browser from a coding agent via a CLI over a persistent Playwright daemon."
 requires-python = ">=3.10"
 dependencies = ["patchright>=1.40"]

@@ -67,16 +67,27 @@ Add `--no-snap` when you don't need it (saves tokens).
 
 ### Targeting ladder (when a ref won't do)
 
-`click` / `type` escalate: `<ref>` → `--selector <css>` → `--selector <css> --offset x,y`
-→ `--at x,y` (absolute pixels). `eval "<js>"` is the universal escape hatch.
+The snapshot is an **AI snapshot**: even icon-only buttons (a `⋮` kebab, a bare ✕) get a
+`[ref=eN]`, so **`click <ref>` works for almost everything** — that's the path you want. The
+ladder below is the rare fallback when an element genuinely has no ref (dynamic canvas, a
+captcha widget, a freshly-injected node before the next snapshot):
 
 ```bash
-browser click e7                          # 1. by ref (preferred)
-browser click --selector "#submit"        # 2. by CSS
+browser click e7                          # 1. by ref (preferred — works even for nameless icons)
+browser click --selector "button.More"    # 2. by CSS — clicks directly, NO coords needed
 browser click --selector ".cta" --offset 10,10   # 3. selector + pixel offset
 browser click --at 640,480                # 4. absolute coordinates (canvas/captcha)
-browser eval "document.querySelector('#go').click()"   # 5. JS
 ```
+
+If you do need coordinates, getting them is clean — `eval` returns a **string result raw**,
+so compute the centre and pipe it straight in (no JSON to unwrap):
+
+```bash
+xy=$(browser eval "(()=>{const r=document.querySelector('button.More').getBoundingClientRect();return Math.round(r.x+r.width/2)+','+Math.round(r.y+r.height/2)})()")
+browser click --at "$xy"
+```
+
+`eval "<js>"` is the universal escape hatch (it can also just `.click()` the element itself).
 
 ## Captcha
 
@@ -108,6 +119,24 @@ browser type e8 "query" && browser press Enter
 **Skip an interactive flow with a URL formula:** many sites encode the whole search in
 the URL — `goto` straight to results instead of clicking through; fewer steps, more
 robust.
+
+**Batch over many items (downloads, etc.) — don't shell-loop over JSON.** A `for x in
+$(... json ...)` splits a JSON array into one mangled token, and on macroOS a non-interactive
+loop can lose `PATH` (so `cp`/`basename` vanish). Two robust options:
+
+```bash
+# A) one explicit call per item (each is independent; no array-splitting)
+browser download e41
+browser download e57
+
+# B) orchestrate in python3 (no word-splitting, full PATH, real error handling)
+python3 - <<'PY'
+import json, subprocess
+ids = json.load(open("/tmp/ids.json"))
+for i in ids:
+    subprocess.run(["browser", "download", i], check=True)
+PY
+```
 
 ## Site guides
 

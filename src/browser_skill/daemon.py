@@ -38,7 +38,7 @@ class Daemon:
         self.page = None
         self.app = None
         self.profile_dir = None
-        self.refs: dict = {}
+        self.refs: set = set()  # valid ref ids from the most recent AI snapshot
         self.last = time.time()
         self._stop = False
         self._quit_browser = False
@@ -349,7 +349,12 @@ class Daemon:
         return self._snap_reply(a=a)
 
     def _cmd_eval(self, a: dict) -> dict:
-        return {"ok": True, "output": json.dumps(self.page.evaluate(a["js"]), default=str)}
+        # Return a string result RAW (no JSON quoting) so e.g. `return x+','+y`
+        # yields `815,176`, pipeable straight into `click --at`. Non-strings
+        # (objects/numbers/bool/None) get clean, single-encoded JSON.
+        val = self.page.evaluate(a["js"])
+        out = val if isinstance(val, str) else json.dumps(val, default=str)
+        return {"ok": True, "output": out}
 
     def _cmd_captcha(self, a: dict) -> dict:
         sub = a.get("sub", "status")
