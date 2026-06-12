@@ -36,20 +36,15 @@ The pieces:
 
 ## Install
 
-**As a Claude Code plugin** (the agent skill — this repo is its own marketplace):
+This repo is its own marketplace:
 
 ```text
 /plugin marketplace add superbereza/browser-skill
 /plugin install browser@browser-skill
 ```
 
-**The `browser` CLI on your own shell** (optional — for running it by hand):
-
-```bash
-./install.sh          # symlinks `browser` into ~/.local/bin
-browser --help        # first run bootstraps a venv (Python >=3.10) + installs deps
-browser launch        # starts a dedicated-profile browser and attaches
-```
+The first `browser` call bootstraps a venv (Python >=3.10) and installs deps; `browser launch`
+starts a dedicated-profile browser and attaches.
 
 macOS for `launch`. The dedicated profile is signed out on first run — log in once
 and sessions persist. Full usage: [`skills/browser/SKILL.md`](skills/browser/SKILL.md).
