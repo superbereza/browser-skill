@@ -9,9 +9,8 @@ Drive a real browser from a coding agent. The agent issues `browser …` command
 small auto-managed daemon holds the live browser session, so commands share state
 (open tab, the last snapshot's refs) without reconnecting each time.
 
-> **Invoking:** use `browser` if it's on PATH (after `install.sh`). If not — e.g.
-> loaded as a plugin — call the bundled launcher `${CLAUDE_PLUGIN_ROOT}/bin/browser`
-> (or `./bin/browser` from the repo). It bootstraps its own venv; no setup step.
+> **Invoking:** call `browser` directly. It manages its own browser daemon and
+> bootstraps its venv on first run (the first call is slower).
 
 ## Mental model (read once)
 

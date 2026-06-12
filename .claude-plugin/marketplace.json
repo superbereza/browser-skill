@@ -8,7 +8,7 @@
     {
       "name": "browser",
       "description": "Drive a real browser from a coding agent — a CLI over a persistent Playwright daemon; CLI + skill",
-      "version": "0.2.0",
+      "version": "0.2.1",
       "source": "./"
     }
   ]

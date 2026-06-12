@@ -2,7 +2,7 @@
   "name": "browser",
   "displayName": "Browser",
   "description": "Drive a real browser from a coding agent: a CLI over a persistent Playwright daemon, with compact clickable page snapshots.",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "author": {
     "name": "superbereza"
   },
