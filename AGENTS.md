@@ -37,4 +37,4 @@ in [`docs/rfc/`](docs/rfc/).
 
 Changing the skill or CLI? For plugin consumers it propagates **only after a
 release** — `scripts/bump.sh <v>` → commit → tag `vX.Y.Z` → GitHub release. A commit
-on `master` alone propagates nothing (agents cache plugins by version string).
+on `main` alone propagates nothing (agents cache plugins by version string).
